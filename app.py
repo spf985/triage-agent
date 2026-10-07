@@ -75,6 +75,8 @@ with st.sidebar:
         secret_key = os.getenv("ZHIPU_API_KEY", "")
     api_key = st.text_input("智谱 API Key（留空使用系统配置）",
                             type="password", value=secret_key)
+    if not api_key:
+        st.warning("⚠️ 未检测到 API Key。请在 Streamlit Cloud 的 Secrets 中配置 ZHIPU_API_KEY，或在上面输入框直接填入。")
     st.divider()
     st.header("🧪 化验单解析（多模态）")
     up = st.file_uploader("上传化验单图片", type=["jpg", "jpeg", "png", "webp", "gif"])
