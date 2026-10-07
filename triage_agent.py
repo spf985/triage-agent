@@ -185,10 +185,12 @@ def retrieve_node(state: TriageState) -> dict:
 def triage_node(state: TriageState) -> dict:
     p = state["patient"]
     kb = "\n---\n".join(state.get("retrieved_docs") or []) or "（知识库无相关内容）"
-    prompt = (SYS_TRIAGE + f"\n\n患者信息：{p}\n\n检索知识：\n{kb}")
+    user_content = f"患者信息：{p}\n\n检索知识：\n{kb}"
     try:
-        out = chat([{"role": "system", "content": prompt}],
-                   api_key=state.get("api_key"), force_json=True)
+        out = chat([
+            {"role": "system", "content": SYS_TRIAGE},
+            {"role": "user", "content": user_content},
+        ], api_key=state.get("api_key"))
         result = extract_json(out)
     except Exception as e:
         import traceback
