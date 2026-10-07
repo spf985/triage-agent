@@ -18,4 +18,3 @@ secrets.toml
 .DS_Store
 Thumbs.db
 
-chroma_db/
