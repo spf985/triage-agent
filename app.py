@@ -75,6 +75,16 @@ with st.sidebar:
         secret_key = os.getenv("ZHIPU_API_KEY", "")
     api_key = st.text_input("智谱 API Key（留空使用系统配置）",
                             type="password", value=secret_key)
+    st.sidebar.write("--- 调试信息 ---")
+    try:
+        st.sidebar.write(f"Secrets 有 ZHIPU_API_KEY: {'ZHIPU_API_KEY' in st.secrets}")
+        _sk = st.secrets.get("ZHIPU_API_KEY", "")
+        st.sidebar.write(f"Secrets Key 长度: {len(_sk)}")
+        st.sidebar.write(f"Secrets Key 前8位: {_sk[:8]}...")
+    except Exception as e:
+        st.sidebar.write(f"Secrets 异常: {e}")
+    st.sidebar.write(f"实际用 Key 长度: {len(api_key)}")
+    st.sidebar.write(f"实际用 Key 前8位: {api_key[:8]}...")
     if not api_key:
         st.warning("⚠️ 未检测到 API Key。请在 Streamlit Cloud 的 Secrets 中配置 ZHIPU_API_KEY，或在上面输入框直接填入。")
     st.divider()
