@@ -193,14 +193,7 @@ def triage_node(state: TriageState) -> dict:
         ], api_key=state.get("api_key"))
         result = extract_json(out)
     except Exception as e:
-        import traceback
-        err_detail = f"{type(e).__name__}: {e}"
-        traceback.print_exc()
-        try:
-            import streamlit as st
-            st.error(f"[triage 失败] {err_detail}")
-        except Exception:
-            print(f"[triage] 解析失败: {err_detail}")
+        print(f"[triage] 解析失败: {type(e).__name__}: {e}")
         sym = p.get("symptoms", "")
         if any(k in sym for k in ["鼻塞", "流涕", "咽痛", "喷嚏"]):
             dept, urg = "耳鼻喉科/儿科", "门诊"
