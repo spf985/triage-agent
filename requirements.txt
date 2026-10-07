@@ -1,6 +1,8 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 streamlit>=1.36
 langgraph>=0.2.0
 langchain-core>=0.2.0
 openai>=1.30
 chromadb>=0.5.0
 sentence-transformers>=2.7.0
+torch==2.2.0

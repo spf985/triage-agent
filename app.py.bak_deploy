@@ -10,28 +10,6 @@ from triage_agent import build_graph, retrieve
 from llm_utils import parse_lab_image, DISCLAIMER, MODEL_CHAT
 
 st.set_page_config(page_title="智能预问诊与分诊AI", page_icon="🏥", layout="wide")
-
-
-def check_password():
-    """简单的密码门，供评委用固定密码访问"""
-    if "password_correct" not in st.session_state:
-        st.session_state.password_correct = False
-    if not st.session_state.password_correct:
-        def password_entered():
-            if st.session_state.get("password", "") == "triage2026":
-                st.session_state.password_correct = True
-                del st.session_state["password"]
-            else:
-                st.session_state.password_correct = False
-        st.text_input("请输入测试密码（评委用）：", type="password",
-                      on_change=password_entered, key="password")
-        return False
-    return True
-
-
-if not check_password():
-    st.stop()
-
 st.title("🏥 智能预问诊与分诊 AI Agent")
 st.caption(f"模型：智谱 {MODEL_CHAT} | 知识库：BGE-small-zh + Chroma")
 
@@ -65,16 +43,8 @@ def _run_agent(user_msg: str, api_key: str | None):
 # ---------------- 侧边栏 ----------------
 with st.sidebar:
     st.header("⚙️ 设置")
-    # 优先读 Streamlit Secrets，其次读环境变量
-    secret_key = ""
-    try:
-        secret_key = st.secrets.get("ZHIPU_API_KEY", "")
-    except Exception:
-        pass
-    if not secret_key:
-        secret_key = os.getenv("ZHIPU_API_KEY", "")
-    api_key = st.text_input("智谱 API Key（留空使用系统配置）",
-                            type="password", value=secret_key)
+    api_key = st.text_input("智谱 API Key（留空用环境变量 ZHIPU_API_KEY）",
+                            type="password", value=os.getenv("ZHIPU_API_KEY", ""))
     st.divider()
     st.header("🧪 化验单解析（多模态）")
     up = st.file_uploader("上传化验单图片", type=["jpg", "jpeg", "png", "webp", "gif"])
