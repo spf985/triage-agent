@@ -2,6 +2,7 @@
 """智能预问诊与分诊 AI Agent —— Streamlit 前端"""
 import json
 import os
+import uuid
 import tempfile
 import streamlit as st
 from langchain_core.messages import HumanMessage
@@ -38,7 +39,7 @@ st.caption(f"模型：智谱 {MODEL_CHAT} | 知识库：BGE-small-zh + Chroma")
 if "graph" not in st.session_state:
     st.session_state.graph = build_graph()
 if "thread" not in st.session_state:
-    st.session_state.thread = {"configurable": {"thread_id": "demo"}}
+    st.session_state.thread = {"configurable": {"thread_id": str(uuid.uuid4())}}
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "lab_json" not in st.session_state:
@@ -118,6 +119,7 @@ with st.sidebar:
     if st.button("🗑️ 清空对话"):
         st.session_state.messages = []
         st.session_state.lab_json = None
+        st.session_state.thread = {"configurable": {"thread_id": str(uuid.uuid4())}}
         st.rerun()
     st.markdown(f"> {DISCLAIMER}")
 
